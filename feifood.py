@@ -8,6 +8,7 @@ menu = {
     4: "Pesquisar Alimento",
     5: "Cadastrar alimento", #ADM TESTE
     6: "Excluir alimento", #ADM TESTE
+    7: "Login de administrador", #ADM TESTE
     0: "Sair"
 }
 
@@ -30,6 +31,8 @@ def main():
             cadastrar_alimento()
         elif escolha == 6: # Excluir alimento Teste
             excluir_alimento()
+        elif escolha == 7: # Login ADM Teste
+            login_adm()
         elif escolha == 0: # Sair
             sair() # Chama a função sair
         else:
@@ -49,6 +52,35 @@ def exibir_menu():
 
 #Funcionalidades do ADM
 ###
+
+def login_adm():
+    print("Olá, administrador, faça seu login:")
+    nome_login = input("Digite o usuário administrador: ")
+    senha_login = input("Digite a senha cadastrada: ")
+    # Abre o arquivo feifood.txt para leitura, lê todo o conteúdo e fecha o arquivo
+    with open("administrador.txt", "r") as arquivo_food:
+        conteudo = arquivo_food.readlines() # Lê todas as linhas do arquivo e armazena em uma lista
+        
+    # Procura o contato no arquivo
+    for linha in conteudo: # Para cada linha no conteúdo do arquivo
+        nome, senha, = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
+        while True:
+            if nome_login.lower()== "sair":
+                print("")
+                print("Voltando para a pagina anterior...")
+                print("")
+                return False
+            
+            if nome_login.lower() == nome.lower() and senha_login == senha: # Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
+                print("")
+                print(f"Login bem sucedido! Bem-vindo, Sr.{nome}.")
+                print("") # Imprime os dados do contato encontrado
+                 # Sai do loop se o contato for encontrado
+                return True
+            
+            else: # Se não encontrar o contato
+                print("Administrador não encontrado, tente novamente.") # Mensagem de erro se o contato não for encontrado
+                return False   
 
 #Cadastrar e excluir alimentos do cardápio
 def cadastrar_alimento():
