@@ -1,16 +1,3 @@
-# Exercício 04
-# Crie uma agenda de telefones que salva os dados de maneira
-# permanente.
-# A agenda deve funcionar em loop infinito, até que o usuário
-# decida sair. Os dados armazenados são: nome, sobrenome,
-# telefone e e-mail.
-# A agenda deve apresentar o seguinte menu para o usuário:
-# ▶ 1- Novo contato (create)
-# ▶ 2- Procura (pelo nome) (read)
-# ▶ 3- Atualiza contato (update)
-# ▶ 4- Apaga contato (delete)
-# ▶ 0- Sair
-
 # O programa deve ser capaz de criar, ler, atualizar e apagar feifood
 
 # Define o menu de opções como um dicionário
@@ -67,11 +54,13 @@ def exibir_menu():
 def cadastrar_alimento():
     print("Novo Alimento:")
     nome_alimento = input("Digite o nome do alimento: ")
+    quantidade_estoque = input("Digite a quantidade disponivel do alimento: ")
+    peso_alimento = input("Digite o peso do alimento: ")
     #valor_alimento = input("Digite o preço do alimento: R$ ")
     # Abre o arquivo feifood.txt para escrita. Modo "a" para adicionar ao final do arquivo
     arquivo_food = open("alimentos.txt", "a")
     # Grava o contato no arquivo
-    arquivo_food.write(f"{nome_alimento}\n") # Grava o alimento no arquivo, separando os dados por vírgula
+    arquivo_food.write(f"\n{nome_alimento}, Estoque: {quantidade_estoque} unidades, Peso: {peso_alimento} gramas") # Grava o alimento no arquivo, separando os dados por vírgula
     # Fecha o arquivo
     arquivo_food.close()
     print("Alimento cadastrado com sucesso!") # Mensagem de sucesso
@@ -166,11 +155,15 @@ def buscar_alimento():
     # Procura o contato no arquivo
     for linha in conteudo: # Para cada linha no conteúdo do arquivo
         alimentos = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
-        if alimento_src.lower() == alimentos[0].lower(): # Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
+        if alimento_src.lower() == alimentos[0].lower()and alimentos[1].lower() and alimentos[2].lower(): # Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
+            print("")
             print(f"Alimento disponível! Faça seu pedido.")
+            print(alimentos[0], alimentos[1] , alimentos[2])
+            print("")
             break # Sai do loop se o contato for encontrado
+
     else: # Se não encontrar o contato
-        print("Alimento ndisponível, escolha outra opção.") # Mensagem de erro se o contato não for encontrado
+        print("Alimento indisponível, escolha outra opção.") # Mensagem de erro se o alimento não estiver disponivel
 
 def atualizar_contato():
     """
