@@ -160,17 +160,17 @@ def buscar_alimento():
     print("Buscar alimento:")
     alimento_src = input("Digite o nome do alimento que deseja procurar: ")
     # Abre o arquivo contatos.txt para leitura, lê todo o conteúdo e fecha o arquivo
-    with open("feifood.txt", "r") as arquivo_food:
+    with open("alimentos.txt", "r") as arquivo_food:
         conteudo = arquivo_food.readlines() # Lê todas as linhas do arquivo e armazena em uma lista
         
     # Procura o contato no arquivo
     for linha in conteudo: # Para cada linha no conteúdo do arquivo
         alimentos = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
-        if alimento_src.lower() == alimentos.lower(): # Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
-            print(f"Alimento disponível: {alimento_src}, Preço: {preco}")
+        if alimento_src.lower() == alimentos[0].lower(): # Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
+            print(f"Alimento disponível! Faça seu pedido.")
             break # Sai do loop se o contato for encontrado
     else: # Se não encontrar o contato
-        print("Contato não encontrado.") # Mensagem de erro se o contato não for encontrado
+        print("Alimento ndisponível, escolha outra opção.") # Mensagem de erro se o contato não for encontrado
 
 def atualizar_contato():
     """
