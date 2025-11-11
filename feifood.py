@@ -20,7 +20,7 @@ menu = {
     3: "Buscar por alimento",
     4: "Pesquisar Alimento",
     5: "Cadastrar alimento", #ADM TESTE
-    6: "     alimento", #ADM TESTE
+    6: "Excluir alimento", #ADM TESTE
     0: "Sair"
 }
 
@@ -89,7 +89,7 @@ def excluir_alimento():
         if not linha.strip():
             continue  # Pula linhas vazias
         nome_alimento = linha.strip().split(",")
-        if alimento_excluir == nome_alimento:
+        if alimento_excluir.lower() == nome_alimento[0].lower():
             print(f"Alimento encontrado: {linha.strip()}")
             # Remove o alimento da lista
             conteudo.pop(i)
@@ -98,7 +98,7 @@ def excluir_alimento():
         print("Alimento não encontrado.")
         
     # Abre o arquivo feifood.txt para escrita
-    arquivo_food = open("feifood.txt", "w")
+    arquivo_food = open("alimentos.txt", "w")
     # Grava os feifood restantes no arquivo
     for linha in conteudo: # Para cada linha no conteúdo do arquivo
         arquivo_food.write(linha) # Grava a linha no arquivo feifood.txt
