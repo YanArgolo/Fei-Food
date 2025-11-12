@@ -1,2 +1,3 @@
 
 Hamburguer, Estoque: 23 unidades, Peso: 330 gramas
+Sushi, Estoque: 47 unidades, Peso: 50 gramas

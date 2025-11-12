@@ -9,6 +9,9 @@ menu = {
     5: "Cadastrar alimento", #ADM TESTE
     6: "Excluir alimento", #ADM TESTE
     7: "Login de administrador", #ADM TESTE
+    8: "Consultar Usuários", #ADM TESTE
+    9: "Total de usuarios cadastrados", #ADM TESTE
+    10: "Quantidade de Alimentos cadastrados", #ADM TESTE
     0: "Sair"
 }
 
@@ -33,6 +36,12 @@ def main():
             excluir_alimento()
         elif escolha == 7: # Login ADM Teste
             login_adm()
+        elif escolha == 8: # Login ADM Teste
+            consulta_user()
+        elif escolha == 9:
+            total_users()
+        elif escolha == 10:
+            total_alimentos()
         elif escolha == 0: # Sair
             sair() # Chama a função sair
         else:
@@ -127,6 +136,44 @@ def excluir_alimento():
     arquivo_food.close()
     print("Alimento excluído com sucesso!") # Mensagem de sucesso
 
+#Funcao para consultar usuarios existentes
+def consulta_user():
+    print("Procurar usuário:")
+    user_procurar = input("Digite o nome do usuário que deseja procurar: ")
+    # Abre o arquivo contatos.txt para leitura, lê todo o conteúdo e fecha o arquivo
+    with open("feifood.txt", "r") as arquivo_food:
+        conteudo = arquivo_food.readlines() # Lê todas as linhas do arquivo e armazena em uma lista
+        
+    # Procura o contato no arquivo
+    for linha in conteudo: # Para cada linha no conteúdo do arquivo
+        nome = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
+        if user_procurar.lower() == nome[0].lower() and nome[1].lower: # Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
+            print(f"Nome: {nome[0]}, Senha: {nome[1]}")
+            break # Sai do loop se o contato for encontrado
+    else: # Se não encontrar o contato
+        print("Usuário não encontrado.") # Mensagem de erro se o contato não for encontrado
+
+#def bem_avaliados:
+
+#def mal_avaliados():
+
+
+#Função para contar o total de usuários cadastrados.
+def total_users():
+    with open("feifood.txt", "r") as arquivo_food:
+        conteudo = arquivo_food.readlines() # Lê todas as linhas do arquivo e armazena em uma lista
+    total = len(conteudo) # Conta o número de linhas (usuários)
+    print(f"Total de usuários cadastrados: {total}")
+
+#Função para contar o total de alimentos cadastrados.
+def total_alimentos():
+    with open("alimentos.txt", "r") as arquivo_food:
+        conteudo = arquivo_food.readlines()
+    total = len(conteudo)
+    print(f"Total de alimentos cadastrados: {total}")
+
+
+#Funcionalidades do usuario comum
 def cadastrar_usuario():
     """
     Função para adicionar um novo contato à agenda.
