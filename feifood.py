@@ -11,7 +11,7 @@ menu = {
     7: "Login de administrador", #ADM TESTE
     8: "Consultar Usuários", #ADM TESTE
     9: "Total de usuarios cadastrados", #ADM TESTE
-    10: "Quantidade de Alimentos cadastrados", #ADM TESTE
+    10: "Quantidade de Alimentos cadastrados", #ADM TESTE#
     0: "Sair"
 }
 
