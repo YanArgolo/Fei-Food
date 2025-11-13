@@ -1,5 +1,6 @@
+# Imports
+from random import randint
 # O programa deve ser capaz de criar, ler, atualizar e apagar feifood
-
 # Define o menu de opções como um dicionário
 menu = {
     1: "Cadastrar novo usuário",
@@ -12,7 +13,18 @@ menu = {
     8: "Consultar Usuários", #ADM TESTE
     9: "Total de usuarios cadastrados", #ADM TESTE
     10: "Quantidade de Alimentos cadastrados", #ADM TESTE#
+    11: "Menu pedidos",
     0: "Sair"
+}
+
+# Menu pedidos
+menu_pedido = {
+    1: "Cadastrar novo pedido",
+    2: "Atualizar pedido",
+    3: "Alterar alimento",
+    4: "Remover Alimento",
+    5: "Excluir pedido",
+    0: "Voltar ao menu principal"
 }
 
 def main():
@@ -42,6 +54,24 @@ def main():
             total_users()
         elif escolha == 10:
             total_alimentos()
+        elif escolha == 11:
+            while True:
+                escolha_pedido = exibir_menu_pedido()
+                if escolha_pedido == 1:
+                    cadastrar_pedido()
+                elif escolha_pedido == 2:
+                    print("Função alterar/remover alimento ainda não implementada.")
+                elif escolha_pedido == 3:
+                    print("Função alterar alimento ainda não implementada.")
+                elif escolha_pedido == 4:
+                    print("Função remover alimento ainda não implementada.")
+                elif escolha_pedido == 5:
+                    excluir_pedido()
+                elif escolha_pedido == 0:
+                    print("Voltando ao menu principal...")
+                    break
+                else:
+                    print("Opção inválida. Tente novamente.")
         elif escolha == 0: # Sair
             sair() # Chama a função sair
         else:
@@ -55,6 +85,17 @@ def exibir_menu():
     """
     print("Menu:")
     for opcao, descricao in menu.items():
+        print(f"{opcao} - {descricao}")
+    escolha = int(input("Escolha uma opção: ")) # Lê a opção escolhida pelo usuário, sem validar
+    return escolha # Retorna a opção escolhida
+
+def exibir_menu_pedido():
+    """
+    Função para exibir o menu de opções e retornar a escolha do usuário.
+    :return: Opção escolhida pelo usuário.
+    """
+    print("Menu Pedidos:")
+    for opcao, descricao in menu_pedido.items():
         print(f"{opcao} - {descricao}")
     escolha = int(input("Escolha uma opção: ")) # Lê a opção escolhida pelo usuário, sem validar
     return escolha # Retorna a opção escolhida
@@ -243,6 +284,130 @@ def buscar_alimento():
 
     else: # Se não encontrar o contato
         print("Alimento indisponível, escolha outra opção.") # Mensagem de erro se o alimento não estiver disponivel
+
+
+# Menu pedido
+def cadastrar_pedido():
+    """
+    Função para cadastrar um novo pedido, listando os alimentos para escolha
+    
+    """
+    print("\n---Cadastrar Novo Pedido ---")
+    
+    # Lista o alimento pra pessoa escolher
+    alimentos_disponiveis = []
+   
+    with open("alimentos.txt", "r") as arquivo_food:
+        # Filtra linhas vazias e armazena em uma lista
+        alimentos_disponiveis = [linha.strip() for linha in arquivo_food if linha.strip()]
+            
+    if  (alimentos_disponiveis == " "):
+        print(" O cardápio está vazio. Não é possível fazer um pedido.")
+        return
+
+    print("\nCardápio de Alimentos Disponíveis:")
+    for i, linha in enumerate(alimentos_disponiveis, 1):
+        # Exibe apenas a primeira parte da linha (o nome do alimento) para simplificar a escolha
+        print(f"{i} - {linha}")
+
+    # Abre o pedidos.txt para cadastrar o pedido
+    arquivo_food = open("pedidos.txt", "a")
+    # Coleta e valida a escolha
+  
+    escolha = input("Digite o **número** do alimento que deseja pedir (ou '0' para cancelar): ")
+    if escolha == '0':
+        print("Cadastro de pedido cancelado.")
+        return
+
+    indice_escolhido = int(escolha) - 1
+
+    if 0 <= indice_escolhido < len(alimentos_disponiveis):
+        pedido = alimentos_disponiveis[indice_escolhido].split(",")[0].strip()
+    else:
+        print("Opção inválida. Digite um número válido da lista.")
+   
+    tipo = input("Digite o tipo do pedido (Entrega ou Retirada): ").strip().lower()
+    codigo_pedido = randint(1000, 9999) 
+    telefone = input("Telefone para contato: ")
+    
+    if tipo == "entrega":
+        endereco = input("Digite seu endereço completo: ")
+        arquivo_food.write(f"Código: {codigo_pedido}, Pedido: {pedido}, Tipo: Entrega, Endereço: {endereco}, Telefone: {telefone}\n" )
+        mensagem_sucesso = (f"Pedido de Entrega {codigo_pedido} cadastrado com sucesso!")
+
+    elif tipo == "retirada":
+        arquivo_food.write (f"Código: {codigo_pedido}, Pedido: {pedido}, Tipo: Retirada, Telefone: {telefone}\n")
+        mensagem_sucesso = (f"Pedido de Retirada {codigo_pedido} cadastrado com sucesso!")
+
+    else:
+        print("---------------------")
+        print(f"Tipo de pedido '{tipo}' inválido.")
+        print("---------------------")
+        return
+      
+    print("---------------------")
+    print(mensagem_sucesso)
+    print("---------------------")
+    arquivo_food.close()   
+
+
+# Excluir pedido
+def excluir_pedido():
+    cd_pedido_excluir = input("Digite o código do pedido que deseja excluir: ")
+
+   
+    # Abre o arquivo pedidos.txt para leitura
+    with open("pedidos.txt", "r") as arquivo_food:
+            # Lê o conteúdo do arquivo
+            conteudo = arquivo_food.readlines()
+
+    # Lista para armazenar as linhas que NÃO serão excluídas
+    novo_conteudo = []
+    excluido = False
+    
+
+    # Procura o pedido no arquivo
+    for linha in conteudo:
+        linha_limpa = linha.strip()
+        if not linha_limpa:
+            continue  # Pula linhas vazias
+            
+        # 1. Encontra a parte que contém o código
+        if "Código:" in linha_limpa:
+            # Pega o primeiro segmento (ex: "Código: 1234")
+            primeira_parte = linha_limpa.split(",")[0].strip()
+            
+            # 2. Extrai SOMENTE o número do código 
+            try:
+                codigo_na_linha = primeira_parte.split(":")[1].strip()
+            except IndexError:
+                # Caso a linha não esteja no formato esperado (ex: falta ":")
+                codigo_na_linha = "" 
+
+            # 3. Compara o código digitado com o código extraído da linha
+            if cd_pedido_excluir == codigo_na_linha:
+                print(f"Pedido encontrado e excluído: {linha_limpa}")
+                excluido = True
+                # Nao adiciona esta linha ao novo_conteudo (a exclusão acontece aqui)
+            else:
+                novo_conteudo.append(linha) # Mantém a linha
+        else:
+            # Mantém linhas que não parecem ser um registro de pedido
+            novo_conteudo.append(linha) 
+
+    # Se não encontrar o pedido
+    if not excluido: 
+        print("Pedido não encontrado.")
+        return
+
+    # Abre o arquivo pedidos.txt para escrita (sobrescreve)
+    with open("pedidos.txt", "w") as arquivo_food:
+        # Grava os pedidos restantes no arquivo
+        arquivo_food.writelines(novo_conteudo)
+
+    print("Pedido excluído com sucesso!")
+
+
 
 def atualizar_contato():
     """
