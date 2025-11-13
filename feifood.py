@@ -97,7 +97,7 @@ def main():
                     # 2. A "CHAVE": Atualiza a variável se o login for True
                     admin_logado = login_adm()
                 
-                # 3. A "PORTA": Protege as opções 2-6
+                # 3. A "PORTA": Protege as opções 2-7
                 elif escolha_admin == 2:
                     if admin_logado:
                         cadastrar_alimento()
@@ -127,16 +127,18 @@ def main():
                         total_alimentos()
                     else:
                         print("\n# --- ACESSO NEGADO --- #\nVocê precisa fazer login primeiro.\n# --------------------- #\n")
-                
+    
+                elif escolha_admin == 7:
+                    if admin_logado:
+                        estatisticas_pedidos() # Chama a sua função de avaliações
+                    else:
+                        print("\n# --- ACESSO NEGADO --- #\nVocê precisa fazer login primeiro.\n# --------------------- #\n")   
+
                 elif escolha_admin == 0:
-                    # O 'break' já volta para o loop principal,
-                    # que vai exibir o menu principal novamente.
                     break
-                
                 else:
-                    # Isso pega a Opção 1 (que já foi tratada) e opções inválidas
                     if escolha_admin != 1:
-                         print("Opção inválida. Tente novamente.")
+                        print("Opção inválida. Tente novamente.")
         elif escolha == 0: 
             sair()
         
@@ -546,6 +548,7 @@ def cadastrar_pedido():
     arquivo_food.close()   
 
 # funcao para editar pedidos existentes
+# funcao para editar pedidos existentes
 def editar_pedido():
     """
     Atualiza os dados de um contato existente na agenda.
@@ -555,48 +558,74 @@ def editar_pedido():
     print("Editar pedido:")
     pedido_editar = input("Digite o código do pedido que deseja editar: ")
     print("# ---------------------------------------------------------- #")
+    
     # Abre o arquivo feifood.txt para leitura
     arquivo_food = open("pedidos.txt", "r")
-    # Lê o conteúdo do arquivo
     conteudo = arquivo_food.readlines()
-    # Fecha o arquivo
     arquivo_food.close()
+
     # Procura o contato no arquivo
     for i, linha in enumerate(conteudo): # Para cada indice e linha no conteúdo do arquivo 
-        codigo_pedido, pedido, tipo, endereco, telefone = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
-        if pedido_editar.lower() == codigo_pedido.lower():# Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
-            print(f"Pedido encontrado: {linha.strip()}") # Imprime os dados do contato encontrado
-            # Atualiza os dados do contato
-            print(codigo_pedido)
+        
+        # --- MUDANÇA 1: Pula linhas vazias (Evita o ValueError) ---
+        if not linha.strip():
+            continue 
+            
+        codigo_pedido, pedido, tipo, endereco, telefone = linha.strip().split(",") 
+        
+        # --- MUDANÇA 2: Adiciona .strip() para remover espaços ---
+        if pedido_editar.lower() == codigo_pedido.strip().lower():
+            print(f"Pedido encontrado: {linha.strip()}") 
+            
+            # (O resto da sua lógica está perfeita)
+            print(codigo_pedido.strip()) # .strip() aqui também para mostrar limpo
             novo_pedido= input("Digite o novo pedido que deseja fazer (deixe em branco para não alterar): ")
             novo_tipo = input("Entrega ou retirada? (deixe em branco para não alterar): ")
             novo_endereco = input("Digite o novo endereço (deixe em branco para não alterar): ")
             novo_telefone = input("Digite o novo telefone (deixe em branco para não alterar): ")
 
-            # Retorna aos valores preenchidos anteriormente se o usuário deixar em branco
-            novo_pedido = novo_pedido or pedido
-            novo_tipo = novo_tipo or tipo
-            novo_endereco = novo_endereco or endereco
-            novo_telefone = novo_telefone or telefone
+            # .strip() nos valores antigos para limpar os dados
+            # --- CORREÇÃO: Checa se o campo está vazio OU se é "0" ---
 
-            #atualiza a linha específica no conteúdo
-            conteudo[i] = f"{codigo_pedido},{novo_pedido},{novo_tipo},{novo_endereco}, {novo_telefone}\n"
+                    # Pega o valor antigo e limpa (remove espaços)
+            pedido_antigo = pedido.strip()
+            tipo_antigo = tipo.strip()
+            endereco_antigo = endereco.strip()
+            telefone_antigo = telefone.strip()
+
+                    # Se o usuário digitou "0" ou deixou em branco, usa o valor antigo.
+                    # Senão, usa o novo valor que ele digitou.
+            if novo_pedido == "0" or novo_pedido == "":
+                novo_pedido = pedido_antigo
+
+            if novo_tipo == "0" or novo_tipo == "":
+                novo_tipo = tipo_antigo
+
+            if novo_endereco == "0" or novo_endereco == "":
+                novo_endereco = endereco_antigo
+
+            if novo_telefone == "0" or novo_telefone == "":
+                 novo_telefone = telefone_antigo
+
+                     # A linha de salvar o conteúdo continua a mesma
+            conteudo[i] = f"{codigo_pedido.strip()},{novo_pedido},{novo_tipo},{novo_endereco},{novo_telefone}\n"
 
             # Abre o arquivo pedidos.txt para escrita
             arquivo_food = open("pedidos.txt", "w")
             # Grava os feifood atualizados no arquivo
-            for linha in conteudo: # Para cada linha no conteúdo do arquivo
-                arquivo_food.write(linha) # Grava a linha no arquivo feifood.txt
+            for linha_salvar in conteudo: 
+                arquivo_food.write(linha_salvar) 
             # Fecha o arquivo
             arquivo_food.close()
             print("# ---------------------------------------------------------- #")
-            print("Pedido atualizado com sucesso!") # Mensagem de sucesso
+            print("Pedido atualizado com sucesso!") 
             print("# ---------------------------------------------------------- #")
 
-        break # Sai do loop se o contato for encontrado
-    else: # Se não encontrar o pedido
+            break # Sai do loop se o contato for encontrado
+    
+    else: # Se o 'for' loop terminar sem 'break'
         print("# ---------------------------------------------------------- #")
-        print("Pedido não encontrado.") # Mensagem de erro se o contato não for encontrado
+        print("Pedido não encontrado.") # Mensagem de erro
         
 #Funcao para excluir pedidos existentes
 def excluir_pedido():
@@ -636,68 +665,75 @@ def add_alimento_pedido():
     print("# ---------------------------------------------------------- #")
     print("Adicionar alimento ao pedido: ")
     pedido_adicionar = input("Digite o código do pedido que deseja adicionar alimento: ")
+    
     # Abre o arquivo feifood.txt para leitura
     arquivo_food = open("pedidos.txt", "r")
-    # Lê o conteúdo do arquivo
     conteudo = arquivo_food.readlines()
-    # Fecha o arquivo
     arquivo_food.close()
+    
     # Procura o contato no arquivo
     for i, linha in enumerate(conteudo): # Para cada indice e linha no conteúdo do arquivo 
-        codigo_pedido, pedido, tipo, endereco, telefone = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
-        if pedido_adicionar.lower() == codigo_pedido.lower():# Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
+        
+        # --- MUDANÇA 1: Pula linhas vazias (Evita o ValueError) ---
+        if not linha.strip():
+            continue
+            
+        codigo_pedido, pedido, tipo, endereco, telefone = linha.strip().split(",") 
+        
+        # --- MUDANÇA 2: Adiciona .strip() para remover espaços ---
+        if pedido_adicionar.lower() == codigo_pedido.strip().lower():
             print("# ---------------------------------------------------------- #")
-            print(f"Pedido encontrado: {linha.strip()}") # Imprime os dados do contato encontrado
+            print(f"Pedido encontrado: {linha.strip()}") 
             print("# ---------------------------------------------------------- #")
             # Atualiza os dados do contato
             print("# ---------------------------------------------------------- #")
             print("--- \nCardápio de Alimentos Disponíveis: ---")
             print("# ---------------------------------------------------------- #")
-            with open("alimentos.txt", "r") as arquivo_food:
+            
+            with open("alimentos.txt", "r") as arquivo_food_cardapio: # Renomeei a variável
                 alimentos_disponiveis = []
-                alimentos_disponiveis = [linha.strip() for linha in arquivo_food if linha.strip()]
+                alimentos_disponiveis = [linha_cardapio.strip() for linha_cardapio in arquivo_food_cardapio if linha_cardapio.strip()]
 
                 if not alimentos_disponiveis:
                     print("O cardápio está vazio. Não é possível fazer um pedido.")
                     return
-                
-            for c, linha in enumerate(alimentos_disponiveis, 1):
-                # Exibe apenas a primeira parte da linha (o nome do alimento) para simplificar a escolha
-                print(f"{c} - {linha}")
+                        
+            # --- MUDANÇA 3: Renomeei 'linha' para 'linha_cardapio' ---
+            # Isso evita o bug de 'i' vs 'c' que vimos antes
+            for c, linha_cardapio in enumerate(alimentos_disponiveis, 1):
+                print(f"{c} - {linha_cardapio}")
                 print()
 
-        # Filtra linhas vazias e armazena em uma lista
             print("# ---------------------------------------------------------- #")
             novo_alimento= input("Digite o novo alimento que deseja adicionar ao pedido: ")
 
             # Bloco de Validação
             alimento_valido = False
             for item_do_cardapio in alimentos_disponiveis:
-                # Checa se o nome digitado (ex: "Sushi") está dentro da linha
                 if novo_alimento.lower() in item_do_cardapio.lower():
                     alimento_valido = True
                     break
 
-            # Se, depois do loop, o alimento não for válido
             if not alimento_valido:
                 print(f"{novo_alimento} não faz parte do cardápio.")
                 return # Sai da função sem salvar
 
-            #atualiza a linha específica no conteúdo
-            conteudo[i] = f"{codigo_pedido},{pedido} + {novo_alimento},{tipo},{endereco},{telefone}\n"
+            # --- MUDANÇA 4: Limpa os dados antigos com .strip() ---
+            conteudo[i] = f"{codigo_pedido.strip()},{pedido.strip()} + {novo_alimento},{tipo.strip()},{endereco.strip()},{telefone.strip()}\n"
 
             # Abre o arquivo pedidos.txt para escrita
             arquivo_food = open("pedidos.txt", "w")
             # Grava os feifood atualizados no arquivo
-            for linha in conteudo: # Para cada linha no conteúdo do arquivo
-                arquivo_food.write(linha) # Grava a linha no arquivo feifood.txt
+            for linha_salvar in conteudo: # Renomeei 'linha'
+                arquivo_food.write(linha_salvar) 
             # Fecha o arquivo
             arquivo_food.close()
             print("# ---------------------------------------------------------- #")
             print("Alimento adicionado ao pedido com sucesso!") # Mensagem de sucesso
             print("# ---------------------------------------------------------- #")
 
-        break # Sai do loop se o contato for encontrado
+            break # Sai do loop se o contato for encontrado
+    
     else: # Se não encontrar o pedido
         print("# ---------------------------------------------------------- #")
         print("Pedido não encontrado.") # Mensagem de erro se o contato não for encontrado
@@ -708,43 +744,51 @@ def excluir_alimento_pedido():
     print("Remover alimento do pedido: ")
     pedido_remover = input("Digite o código do pedido que deseja remover alimento: ")
     print("# ---------------------------------------------------------- #")
+    
     # Abre o arquivo feifood.txt para leitura
     arquivo_food = open("pedidos.txt", "r")
-    # Lê o conteúdo do arquivo
     conteudo = arquivo_food.readlines()
-    # Fecha o arquivo
     arquivo_food.close()
+    
     # Procura o contato no arquivo
     for i, linha in enumerate(conteudo): # Para cada indice e linha no conteúdo do arquivo 
-        codigo_pedido, pedido, tipo, endereco, telefone = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
-        if pedido_remover.lower() == codigo_pedido.lower():# Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
+        
+        # --- MUDANÇA 1: Pula linhas vazias (Evita o ValueError) ---
+        if not linha.strip():
+            continue
+            
+        codigo_pedido, pedido, tipo, endereco, telefone = linha.strip().split(",") 
+        
+        # --- MUDANÇA 2: Adiciona .strip() para remover espaços ---
+        if pedido_remover.lower() == codigo_pedido.strip().lower():
             print("# ---------------------------------------------------------- #")
-            print(f"Pedido encontrado: {linha.strip()}") # Imprime os dados do contato encontrado
-            # Atualiza os dados do contato
-            alimento_remover= input("Digite o alimento que deseja remover do pedido: ")
+            print(f"Pedido encontrado: {linha.strip()}") 
+            
+            alimento_remover = input("Digite o alimento que deseja remover do pedido: ")
 
-            # Remove o alimento do pedido
-            novos_itens = pedido.replace(f" + {alimento_remover}", "").replace(f"{alimento_remover} + ", "").replace(alimento_remover, "")
+            # Remove o alimento do pedido (usando .strip() no pedido antigo)
+            # A sua lógica de replace está boa!
+            novos_itens = pedido.strip().replace(f" + {alimento_remover}", "").replace(f"{alimento_remover} + ", "").replace(alimento_remover, "")
 
-            #atualiza a linha específica no conteúdo
-            conteudo[i] = f"{codigo_pedido},{novos_itens},{tipo},{endereco},{telefone}\n"
+            # Atualiza a linha específica no conteúdo (limpando todos os dados)
+            conteudo[i] = f"{codigo_pedido.strip()},{novos_itens.strip()},{tipo.strip()},{endereco.strip()},{telefone.strip()}\n"
 
             # Abre o arquivo pedidos.txt para escrita
             arquivo_food = open("pedidos.txt", "w")
             # Grava os feifood atualizados no arquivo
-            for linha in conteudo: # Para cada linha no conteúdo do arquivo
-                arquivo_food.write(linha) # Grava a linha no arquivo feifood.txt
+            for linha_salvar in conteudo: # Renomeei 'linha'
+                arquivo_food.write(linha_salvar) 
             # Fecha o arquivo
             arquivo_food.close()
             print("Alimento removido do pedido com sucesso!")
-            print("# ---------------------------------------------------------- #") # Mensagem de sucesso
+            print("# ---------------------------------------------------------- #") 
 
-        break # Sai do loop se o contato for encontrado
+            break # Sai do loop se o contato for encontrado
+    
     else: # Se não encontrar o pedido
         print("# ---------------------------------------------------------- #")
-        print("Pedido não encontrado.") # Mensagem de erro se o contato não for encontrado
+        print("Pedido não encontrado.") 
         print("# ---------------------------------------------------------- #")
-
 
 def avaliar_pedido():
    # Lista os pedidos existentes
