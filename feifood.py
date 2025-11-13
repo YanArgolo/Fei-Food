@@ -400,9 +400,7 @@ def editar_pedido():
     else: # Se não encontrar o pedido
         print("Pedido não encontrado.") # Mensagem de erro se o contato não for encontrado
         
-       
-
-
+#Funcao para excluir pedidos existentes
 def excluir_pedido():
     pedido_excluir = input("Digite o código do pedido que deseja excluir: ")
     # Abre o arquivo alimentos.txt para leitura
