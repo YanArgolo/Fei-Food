@@ -24,6 +24,7 @@ menu_pedido = {
     3: "Excluir pedido",
     4: "Adicionar alimento ao pedido",
     5: "Remover alimento do pedido",
+    6: "Avaliar pedido",
     0: "Voltar ao menu principal"
 }
 
@@ -69,6 +70,8 @@ def main():
                     add_alimento_pedido()
                 elif escolha_pedido == 5:
                     print
+                elif escolha_pedido -- 6:
+                    avaliar_pedido()
                 elif escolha_pedido == 0:
                     print("Voltando ao menu principal...")
                     break
@@ -288,7 +291,7 @@ def buscar_alimento():
         print("Alimento indisponível, escolha outra opção.") # Mensagem de erro se o alimento não estiver disponivel
 
 
-# Menu pedido
+# ------------------------------------------------------ Menu pedido --------------------------------------------------- #
 def cadastrar_pedido():
     """
     Função para cadastrar um novo pedido, listando os alimentos para escolha
@@ -540,46 +543,60 @@ def add_alimento_pedido():
         print("Pedido não encontrado.") # Mensagem de erro se o contato não for encontrado
 
 
-def atualizar_contato():
-    """
-    Atualiza os dados de um contato existente na agenda.
-    :return: None
-    """
-    print("Atualizar contato:")
-    nome_atualizar = input("Digite o nome do contato que deseja atualizar: ")
-    # Abre o arquivo feifood.txt para leitura
-    arquivo_food = open("feifood.txt", "r")
-    # Lê o conteúdo do arquivo
-    conteudo = arquivo_food.readlines()
-    # Fecha o arquivo
-    arquivo_food.close()
-    # Procura o contato no arquivo
-    for i, linha in enumerate(conteudo): # Para cada indice e linha no conteúdo do arquivo 
-        nome, sobrenome, telefone, email = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
-        if nome_atualizar.lower() == nome.lower(): # Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
-            print(f"Contato encontrado: {linha.strip()}") # Imprime os dados do contato encontrado
-            # Atualiza os dados do contato
-            novo_nome = input("Digite o novo nome (deixe em branco para não alterar): ")
-            novo_sobrenome = input("Digite o novo sobrenome (deixe em branco para não alterar): ")
-            novo_telefone = input("Digite o novo telefone (deixe em branco para não alterar): ")
-            novo_email = input("Digite o novo e-mail (deixe em branco para não alterar): ")
-            # Atualiza os dados do contato, se o usuário não deixar o nome em branco
-            if novo_nome:
-                conteudo[i] = f"{novo_nome},{novo_sobrenome},{novo_telefone},{novo_email}\n"
-            else:
-                conteudo[i] = f"{nome},{sobrenome},{telefone},{email}\n"
-            break # Sai do loop se o contato for encontrado
-    else: # Se não encontrar o contato
-        print("Contato não encontrado.") # Mensagem de erro se o contato não for encontrado
-        
-    # Abre o arquivo feifood.txt para escrita
-    arquivo_food = open("feifood.txt", "w")
-    # Grava os feifood atualizados no arquivo
-    for linha in conteudo: # Para cada linha no conteúdo do arquivo
-        arquivo_food.write(linha) # Grava a linha no arquivo feifood.txt
-    # Fecha o arquivo
-    arquivo_food.close()
-    print("Contato atualizado com sucesso!") # Mensagem de sucesso
+def avaliar_pedido():
+   # Lista os pedidos existentes
+    pedidos_feitos = []
+    
+    # Abre o arquivo 'pedidos.txt' para ler a lista de pedidos a serem exibidos
+    with open("pedidos.txt", "r") as arquivo_food:
+        # Lê o conteúdo para a lista pedidos_feitos
+        pedidos_feitos = [linha.strip() for linha in arquivo_food if linha.strip()]
+    
+    if not pedidos_feitos:
+        print("Não existe nenhum pedido para avaliar.")
+        return
+
+    print("--- \nPedidos para Avaliação: ---")
+    for i, linha in enumerate(pedidos_feitos, 1):
+        # Exibe o pedido completo
+        print(f"{i} - {linha}")
+        print()
+    
+    pedido_avaliar = input("Digite o código do pedido que deseja avaliar: ").strip()
+    
+    # Lê o conteúdo do arquivo pedidos.txt novamente para buscar
+    with open("pedidos.txt", "r") as arquivo_food:
+        conteudo = arquivo_food.readlines()
+
+    encontrado = False
+    
+    # Procura o pedido pelo código
+    for linha in conteudo: 
+        partes = linha.strip().split(",") 
+        codigo_pedido = partes[0].strip()
+            
+        if pedido_avaliar.lower() == codigo_pedido.lower():
+            print(f"\nPedido encontrado: {linha.strip()}")
+            encontrado = True
+            
+            # --- Lógica de Avaliação ---
+            while True:
+                nota_str = input("Digite um número inteiro de 0 a 5 para avaliar com estrelas o pedido: ").strip()
+                nota = int(nota_str)
+                if 0 <= nota <= 5:
+                    break
+                else:
+                    print("Nota inválida. Digite um número entre 0 e 5.") 
+            
+            # Grava a avaliação no arquivo 'avaliacoes.txt'
+            with open("avaliacoes.txt", "a") as arquivo_avaliacao:
+                arquivo_avaliacao.write(f"Pedido: {codigo_pedido}, Avaliação: {nota}\n")
+            
+            print(f"Pedido {codigo_pedido} avaliado com sucesso! Nota registrada: {nota}")
+            break 
+            
+    if not encontrado:
+        print("Pedido não encontrado. Verifique o código e tente novamente.")
     
 def apagar_contato():
     """
