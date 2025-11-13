@@ -55,12 +55,14 @@ def main():
         elif escolha == 10:
             total_alimentos()
         elif escolha == 11:
+
+            #Laco para exibir menu pedido
             while True:
                 escolha_pedido = exibir_menu_pedido()
                 if escolha_pedido == 1:
                     cadastrar_pedido()
                 elif escolha_pedido == 2:
-                    print("Função alterar/remover alimento ainda não implementada.")
+                    editar_pedido()
                 elif escolha_pedido == 3:
                     print("Função alterar alimento ainda não implementada.")
                 elif escolha_pedido == 4:
@@ -332,11 +334,11 @@ def cadastrar_pedido():
     
     if tipo == "entrega":
         endereco = input("Digite seu endereço completo: ")
-        arquivo_food.write(f"Código: {codigo_pedido}, Pedido: {pedido}, Tipo: Entrega, Endereço: {endereco}, Telefone: {telefone}\n" )
+        arquivo_food.write(f"{codigo_pedido}, {pedido}, Entrega, {endereco}, {telefone}\n" )
         mensagem_sucesso = (f"Pedido de Entrega {codigo_pedido} cadastrado com sucesso!")
 
     elif tipo == "retirada":
-        arquivo_food.write (f"Código: {codigo_pedido}, Pedido: {pedido}, Tipo: Retirada, Telefone: {telefone}\n")
+        arquivo_food.write (f" {codigo_pedido}, {pedido}, Retirada, FEI, {telefone}\n")
         mensagem_sucesso = (f"Pedido de Retirada {codigo_pedido} cadastrado com sucesso!")
 
     else:
@@ -350,62 +352,143 @@ def cadastrar_pedido():
     print("---------------------")
     arquivo_food.close()   
 
+# funcao para editar pedidos existentes
+def editar_pedido():
+    """
+    Atualiza os dados de um contato existente na agenda.
+    :return: None
+    """
+    print("Editar pedido:")
+    pedido_editar = input("Digite o código do pedido que deseja editar: ")
+    # Abre o arquivo feifood.txt para leitura
+    arquivo_food = open("pedidos.txt", "r")
+    # Lê o conteúdo do arquivo
+    conteudo = arquivo_food.readlines()
+    # Fecha o arquivo
+    arquivo_food.close()
+    # Procura o contato no arquivo
+    for i, linha in enumerate(conteudo): # Para cada indice e linha no conteúdo do arquivo 
+        codigo_pedido, pedido, tipo, endereco, telefone = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
+        if pedido_editar.lower() == codigo_pedido.lower():# Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
+            print(f"Pedido encontrado: {linha.strip()}") # Imprime os dados do contato encontrado
+            # Atualiza os dados do contato
+            print(codigo_pedido)
+            novo_pedido= input("Digite o novo pedido que deseja fazer (deixe em branco para não alterar): ")
+            novo_tipo = input("Entrega ou retirada? (deixe em branco para não alterar): ")
+            novo_endereco = input("Digite o novo endereço (deixe em branco para não alterar): ")
+            novo_telefone = input("Digite o novo telefone (deixe em branco para não alterar): ")
+
+            # Retorna aos valores preenchidos anteriormente se o usuário deixar em branco
+            novo_pedido = novo_pedido or pedido
+            novo_tipo = novo_tipo or tipo
+            novo_endereco = novo_endereco or endereco
+            novo_telefone = novo_telefone or telefone
+
+            #atualiza a linha específica no conteúdo
+            conteudo[i] = f"{codigo_pedido},{novo_pedido},{novo_tipo},{novo_endereco}, {novo_telefone}\n"
+
+            # Abre o arquivo pedidos.txt para escrita
+            arquivo_food = open("pedidos.txt", "w")
+            # Grava os feifood atualizados no arquivo
+            for linha in conteudo: # Para cada linha no conteúdo do arquivo
+                arquivo_food.write(linha) # Grava a linha no arquivo feifood.txt
+            # Fecha o arquivo
+            arquivo_food.close()
+            print("Pedido atualizado com sucesso!") # Mensagem de sucesso
+
+        break # Sai do loop se o contato for encontrado
+    else: # Se não encontrar o pedido
+        print("Pedido não encontrado.") # Mensagem de erro se o contato não for encontrado
+        
+       
+
+
+def excluir_pedido():
+    pedido_excluir = input("Digite o código do pedido que deseja excluir: ")
+    # Abre o arquivo alimentos.txt para leitura
+    arquivo_food = open("pedidos.txt", "r")
+    # Lê o conteúdo do arquivo
+    conteudo = arquivo_food.readlines()
+    # Fecha o arquivo
+    arquivo_food.close()
+    # Procura o alimento no arquivo
+    for i, linha in enumerate(conteudo):
+        if not linha.strip():
+            continue  # Pula linhas vazias
+        cod_pedido = linha.strip().split(",")
+        if pedido_excluir.lower() == cod_pedido[0].lower():
+            print(f"Pedido encontrado: {linha.strip()}")
+            # Remove o alimento da lista
+            conteudo.pop(i)
+            
+             # Abre o arquivo feifood.txt para escrita
+            arquivo_food = open("pedidos.txt", "w")
+            # Grava os feifood restantes no arquivo
+            for linha in conteudo: # Para cada linha no conteúdo do arquivo
+                arquivo_food.write(linha) # Grava a linha no arquivo feifood.txt
+            # Fecha o arquivo
+            arquivo_food.close()
+            print("Pedido excluído com sucesso!") # Mensagem de sucesso
+            
+            break
+    else: # Se não encontrar o alimento
+        print("Pedido não encontrado.")
 
 # Excluir pedido
-def excluir_pedido():
-    cd_pedido_excluir = input("Digite o código do pedido que deseja excluir: ")
+# def excluir_pedido():
+#     cd_pedido_excluir = input("Digite o código do pedido que deseja excluir: ")
 
-   
-    # Abre o arquivo pedidos.txt para leitura
-    with open("pedidos.txt", "r") as arquivo_food:
-            # Lê o conteúdo do arquivo
-            conteudo = arquivo_food.readlines()
 
-    # Lista para armazenar as linhas que NÃO serão excluídas
-    novo_conteudo = []
-    excluido = False
+#     # Abre o arquivo pedidos.txt para leitura
+#     with open("pedidos.txt", "r") as arquivo_food:
+#             # Lê o conteúdo do arquivo
+#             conteudo = arquivo_food.readlines()
+
+#     # Lista para armazenar as linhas que NÃO serão excluídas
+#     novo_conteudo = []
+#     excluido = False
     
 
-    # Procura o pedido no arquivo
-    for linha in conteudo:
-        linha_limpa = linha.strip()
-        if not linha_limpa:
-            continue  # Pula linhas vazias
+#     # Procura o pedido no arquivo
+#     for linha in conteudo:
+#         linha_limpa = linha.strip()
+#         if not linha_limpa:
+#             continue  # Pula linhas vazias
             
-        # 1. Encontra a parte que contém o código
-        if "Código:" in linha_limpa:
-            # Pega o primeiro segmento (ex: "Código: 1234")
-            primeira_parte = linha_limpa.split(",")[0].strip()
+#         # 1. Encontra a parte que contém o código
+#         if "Código:" in linha_limpa:
+#             # Pega o primeiro segmento (ex: "Código: 1234")
+#             primeira_parte = linha_limpa.split(",")[0].strip()
             
-            # 2. Extrai SOMENTE o número do código 
-            try:
-                codigo_na_linha = primeira_parte.split(":")[1].strip()
-            except IndexError:
-                # Caso a linha não esteja no formato esperado (ex: falta ":")
-                codigo_na_linha = "" 
+#             # 2. Extrai SOMENTE o número do código 
+#             try:
+#                 codigo_na_linha = primeira_parte.split(":")[1].strip()
+#             except IndexError:
+#                 # Caso a linha não esteja no formato esperado (ex: falta ":")
+#                 codigo_na_linha = "" 
 
-            # 3. Compara o código digitado com o código extraído da linha
-            if cd_pedido_excluir == codigo_na_linha:
-                print(f"Pedido encontrado e excluído: {linha_limpa}")
-                excluido = True
-                # Nao adiciona esta linha ao novo_conteudo (a exclusão acontece aqui)
-            else:
-                novo_conteudo.append(linha) # Mantém a linha
-        else:
-            # Mantém linhas que não parecem ser um registro de pedido
-            novo_conteudo.append(linha) 
+#             # 3. Compara o código digitado com o código extraído da linha
+#             if cd_pedido_excluir == codigo_na_linha:
+#                 print(f"Pedido encontrado e excluído: {linha_limpa}")
+#                 excluido = True
+#                 # Nao adiciona esta linha ao novo_conteudo (a exclusão acontece aqui)
+#             else:
+#                 novo_conteudo.append(linha) # Mantém a linha
+#         else:
+#             # Mantém linhas que não parecem ser um registro de pedido
+#             novo_conteudo.append(linha) 
 
-    # Se não encontrar o pedido
-    if not excluido: 
-        print("Pedido não encontrado.")
-        return
+#     # Se não encontrar o pedido
+#     if not excluido: 
+#         print("Pedido não encontrado.")
+#         return
 
-    # Abre o arquivo pedidos.txt para escrita (sobrescreve)
-    with open("pedidos.txt", "w") as arquivo_food:
-        # Grava os pedidos restantes no arquivo
-        arquivo_food.writelines(novo_conteudo)
+#     # Abre o arquivo pedidos.txt para escrita (sobrescreve)
+#     with open("pedidos.txt", "w") as arquivo_food:
+#         # Grava os pedidos restantes no arquivo
+#         arquivo_food.writelines(novo_conteudo)
 
-    print("Pedido excluído com sucesso!")
+#     print("Pedido excluído com sucesso!")
 
 
 
