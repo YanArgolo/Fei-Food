@@ -22,7 +22,7 @@ menu_pedido = {
     1: "Cadastrar novo pedido",
     2: "Atualizar pedido",
     3: "Alterar alimento",
-    4: "Remover Alimento",
+    4: "Adicionar alimento ao pedido",
     5: "Excluir pedido",
     0: "Voltar ao menu principal"
 }
@@ -64,11 +64,11 @@ def main():
                 elif escolha_pedido == 2:
                     editar_pedido()
                 elif escolha_pedido == 3:
-                    print("Função alterar alimento ainda não implementada.")
-                elif escolha_pedido == 4:
-                    print("Função remover alimento ainda não implementada.")
-                elif escolha_pedido == 5:
                     excluir_pedido()
+                elif escolha_pedido == 4:
+                    add_alimento_pedido()
+                elif escolha_pedido == 5:
+                    print
                 elif escolha_pedido == 0:
                     print("Voltando ao menu principal...")
                     break
@@ -292,7 +292,6 @@ def buscar_alimento():
 def cadastrar_pedido():
     """
     Função para cadastrar um novo pedido, listando os alimentos para escolha
-    
     """
     print("\n---Cadastrar Novo Pedido ---")
     
@@ -307,11 +306,11 @@ def cadastrar_pedido():
         print(" O cardápio está vazio. Não é possível fazer um pedido.")
         return
 
-    print("\nCardápio de Alimentos Disponíveis:")
+    print("--- \nCardápio de Alimentos Disponíveis: ---")
     for i, linha in enumerate(alimentos_disponiveis, 1):
         # Exibe apenas a primeira parte da linha (o nome do alimento) para simplificar a escolha
         print(f"{i} - {linha}")
-
+        print()
     # Abre o pedidos.txt para cadastrar o pedido
     arquivo_food = open("pedidos.txt", "a")
     # Coleta e valida a escolha
@@ -488,6 +487,39 @@ def excluir_pedido():
 
 #     print("Pedido excluído com sucesso!")
 
+#Função para adicionar alimento a um pedido existente
+def add_alimento_pedido():
+    print("Adicionar alimento ao pedido:")
+    pedido_adicionar = input("Digite o código do pedido que deseja adicionar alimento: ")
+    # Abre o arquivo feifood.txt para leitura
+    arquivo_food = open("pedidos.txt", "r")
+    # Lê o conteúdo do arquivo
+    conteudo = arquivo_food.readlines()
+    # Fecha o arquivo
+    arquivo_food.close()
+    # Procura o contato no arquivo
+    for i, linha in enumerate(conteudo): # Para cada indice e linha no conteúdo do arquivo 
+        codigo_pedido, pedido, tipo, endereco, telefone = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
+        if pedido_adicionar.lower() == codigo_pedido.lower():# Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
+            print(f"Pedido encontrado: {linha.strip()}") # Imprime os dados do contato encontrado
+            # Atualiza os dados do contato
+            novo_alimento= input("Digite o novo alimento que deseja adicionar ao pedido: ")
+
+            #atualiza a linha específica no conteúdo
+            conteudo[i] = f"{codigo_pedido},{pedido} + {novo_alimento},{tipo},{endereco}, {telefone}\n"
+
+            # Abre o arquivo pedidos.txt para escrita
+            arquivo_food = open("pedidos.txt", "w")
+            # Grava os feifood atualizados no arquivo
+            for linha in conteudo: # Para cada linha no conteúdo do arquivo
+                arquivo_food.write(linha) # Grava a linha no arquivo feifood.txt
+            # Fecha o arquivo
+            arquivo_food.close()
+            print("Alimento adicionado ao pedido com sucesso!") # Mensagem de sucesso
+
+        break # Sai do loop se o contato for encontrado
+    else: # Se não encontrar o pedido
+        print("Pedido não encontrado.") # Mensagem de erro se o contato não for encontrado
 
 
 def atualizar_contato():
