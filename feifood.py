@@ -2,7 +2,7 @@
 from random import randint
 # O programa deve ser capaz de criar, ler, atualizar e apagar feifood
 # Define o menu de opções como um dicionário
-print("# ------------------------------------------ Menu Pedidos ------------------------------------------ #")
+
 menu = {
     1: "Cadastrar novo usuário",
     2: "Login de usuário",
@@ -11,9 +11,7 @@ menu = {
     5: "Menu Admin",
     0: "Sair"
 }
-print("# ------------------------------------------------------------------------------------------------- #")
 
-print("# ------------------------------------------ Menu Pedidos ------------------------------------------ #")
 # Menu pedidos
 menu_pedido = {
     1: "Cadastrar novo pedido",
@@ -24,9 +22,7 @@ menu_pedido = {
     6: "Avaliar pedido",
     0: "Voltar ao menu principal"
 }
-print("# ------------------------------------------------------------------------------------------------- #")
 
-print("# ------------------------------------------ Menu Admin ------------------------------------------ #")
 menu_admin = {
     1: "login admin",
     2: "Cadastrar alimento",
@@ -34,67 +30,109 @@ menu_admin = {
     4: "Consultar usuários",
     5: "Total de usuários",
     6: "Quantidade de alimentos",
+    7: "Avaliações",
     0: "Voltar ao menu principal"
 }
-print("# ------------------------------------------------------------------------------------------------- #")
+
 def main():
     """
     Função principal que exibe o menu e chama as funções correspondentes
     de acordo com a escolha do usuário.
     """
+    usuario_logado = False
     while True: # Loop infinito
         escolha = exibir_menu() # Chama a função exibir_menu e armazena a escolha do usuário
         if escolha == 1: # Novo contato
             cadastrar_usuario() # Chama a função novo_contato
         elif escolha == 2: # Procurar contato
-            login() # Chama a função procurar_contato
+            usuario_logado = login() # Chama a função procurar_contato
         elif escolha == 3: # Atualizar contato
-            buscar_alimento() # Chama a função atualizar_contato
-        elif escolha == 4: # Cadastrar alimento Teste
-            #Laco para exibir menu pedido
-            while True:
-                escolha_pedido = exibir_menu_pedido()
-                if escolha_pedido == 1:
-                    cadastrar_pedido()
-                elif escolha_pedido == 2:
-                    editar_pedido()
-                elif escolha_pedido == 3:
-                    excluir_pedido()
-                elif escolha_pedido == 4:
-                    add_alimento_pedido()
-                elif escolha_pedido == 5:
-                    excluir_alimento_pedido()
-                elif escolha_pedido == 6:
-                    avaliar_pedido()
-                elif escolha_pedido == 0:
-                    exibir_menu()
-                    break
-                else:
-                    print("Opção inválida. Tente novamente.")
-        elif escolha == 5: # Excluir alimento Teste
+            if usuario_logado:
+                buscar_alimento() # Chama a função buscar_alimento
+            else:
+                print("\n# --- ACESSO NEGADO --- #")
+                print("Você precisa fazer login para buscar alimentos.")
+                print("# --------------------- #\n")
+        elif escolha == 4: # Menu pedidos
+            if usuario_logado:
+                # O loop while FICA AQUI DENTRO
+                while True:
+                    escolha_pedido = exibir_menu_pedido()
+                    
+                    if escolha_pedido == 1:
+                        cadastrar_pedido()
+                    elif escolha_pedido == 2:
+                        editar_pedido()
+                    elif escolha_pedido == 3:
+                        excluir_pedido()
+                    elif escolha_pedido == 4:
+                        add_alimento_pedido()
+                    elif escolha_pedido == 5:
+                        excluir_alimento_pedido()
+                    elif escolha_pedido == 6:
+                        avaliar_pedido()
+                    elif escolha_pedido == 0:
+                        # 'break' sozinho já volta para o menu principal.
+                        break 
+                    else:
+                        print("Opção inválida. Tente novamente.")
+            
+            else: # Se 'usuario_logado' for False
+                print("\n# --- ACESSO NEGADO --- #")
+                print("Você precisa fazer login para acessar o menu de pedidos.")
+                print("# --------------------- #\n")
+                
+        elif escolha == 5: # Menu Admin
+            # 1. A "TRAVA": Começa como False toda vez que entramos no menu admin
+            admin_logado = False
+            
             while True:
                 escolha_admin = exibir_menu_admin()
+                
                 if escolha_admin == 1:
-                    login_adm()
+                    # 2. A "CHAVE": Atualiza a variável se o login for True
+                    admin_logado = login_adm()
+                
+                # 3. A "PORTA": Protege as opções 2-6
                 elif escolha_admin == 2:
-                    cadastrar_alimento()
+                    if admin_logado:
+                        cadastrar_alimento()
+                    else:
+                        print("\n# --- ACESSO NEGADO --- #\nVocê precisa fazer login primeiro.\n# --------------------- #\n")
+                
                 elif escolha_admin == 3:
-                    excluir_alimento()
+                    if admin_logado:
+                        excluir_alimento()
+                    else:
+                        print("\n# --- ACESSO NEGADO --- #\nVocê precisa fazer login (Opção 1) primeiro.\n# --------------------- #\n")
+                
                 elif escolha_admin == 4:
-                    consulta_user()
+                    if admin_logado:
+                        consulta_user()
+                    else:
+                        print("\n# --- ACESSO NEGADO --- #\nVocê precisa fazer login primeiro.\n# --------------------- #\n")
+                
                 elif escolha_admin == 5:
-                    total_users()
+                    if admin_logado:
+                        total_users()
+                    else:
+                        print("\n# --- ACESSO NEGADO --- #\nVocê precisa fazer login primeiro.\n# --------------------- #\n")
+                
                 elif escolha_admin == 6:
-                    total_alimentos()
+                    if admin_logado:
+                        total_alimentos()
+                    else:
+                        print("\n# --- ACESSO NEGADO --- #\nVocê precisa fazer login primeiro.\n# --------------------- #\n")
+                
                 elif escolha_admin == 0:
-                    exibir_menu()
+                    # O 'break' já volta para o loop principal,
+                    # que vai exibir o menu principal novamente.
                     break
+                
                 else:
-                    print("Opção inválida. Tente novamente.")
-        elif escolha == 0: # Sair
-            sair() # Chama a função sair
-        else:
-            print("Opção inválida. Tente novamente.") # Mensagem de erro para opção inválida
+                    # Isso pega a Opção 1 (que já foi tratada) e opções inválidas
+                    if escolha_admin != 1:
+                         print("Opção inválida. Tente novamente.")
     
 # ------------------------------------------ Exibição dos menus ------------------------------------------ #
 def exibir_menu():
@@ -265,6 +303,72 @@ def total_alimentos():
     print(f"Total de alimentos cadastrados: {total-1}")
     print("# ---------------------------------------------------------- #")
 
+
+def estatisticas_pedidos():
+    """
+    Função para listar os pedidos mais bem e menos avaliados.
+    """
+    print("# ---------------------------------------------------------- #")
+    print("--- Estatísticas de Avaliações de Pedidos ---")
+    
+    avaliacoes_por_pedido = {}
+
+    with open("avaliacoes.txt", "r") as arquivo_avaliacao:
+        conteudo = arquivo_avaliacao.readlines()
+
+    if not conteudo:
+        print("Arquivo de avaliações está vazio. Não há dados para analisar.")
+        print("# ---------------------------------------------------------- #")
+        return
+
+
+    for linha in conteudo:
+        linha_limpa = linha.strip()
+        partes = linha_limpa.split(',')
+
+        codigo_pedido = partes[0].split(':')[-1].strip()
+        
+        nota_str = partes[1].split(':')[-1].strip()
+        
+        nota = int(nota_str)
+       
+        if codigo_pedido not in avaliacoes_por_pedido:
+            avaliacoes_por_pedido[codigo_pedido] = [0, 0] # 
+
+        avaliacoes_por_pedido[codigo_pedido][0] += nota
+        avaliacoes_por_pedido[codigo_pedido][1] += 1
+
+    if not avaliacoes_por_pedido:
+        print("Nenhum pedido válido foi encontrado para análise.")
+        print("# ---------------------------------------------------------- #")
+        return
+
+    # Calcula a média para cada pedido e armazena em uma lista de tuplas (código, média)
+    medias_avaliacoes = []
+    for codigo, (soma, contagem) in avaliacoes_por_pedido.items():
+        media = soma / contagem
+        medias_avaliacoes.append((codigo, media))
+
+    # Ordena a lista pela média em ordem decrescente
+    medias_avaliacoes.sort(key=lambda x: x[1], reverse=True)
+
+    # Identifica a nota máxima e mínima para exibir os pedidos
+    max_nota = medias_avaliacoes[0][1]
+    min_nota = medias_avaliacoes[-1][1]
+    
+    print("# ---------------------------------------------------------- #")
+    print("--- Pedidos Mais Bem Avaliados (Nota Máxima) ---")
+    for codigo, media in medias_avaliacoes:
+        if media == max_nota:
+            print(f"Pedido: {codigo}, Média de Avaliação: {media:.2f}")
+
+    print("\n--- Pedidos Menos Avaliados (Nota Mínima) ---")
+    for codigo, media in medias_avaliacoes:
+        if media == min_nota:
+            print(f"Pedido: {codigo}, Média de Avaliação: {media:.2f}")
+            
+    print("# ---------------------------------------------------------- #")
+
 # ------------------------------------------ Fim menu Admin ------------------------------------------ #
 
 
@@ -306,26 +410,36 @@ def login():
         
     # Procura o contato no arquivo
     for linha in conteudo: # Para cada linha no conteúdo do arquivo
-        nome, senha, = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
-        while True:
-            if nome_login.lower()== "sair":
-                print("")
-                print("Voltando para a pagina anterior...")
-                print("")
-                return False
+        dados = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
+
+        # 🛑 VERIFICAÇÃO DE SEGURANÇA ADICIONADA:
+        # Verifica se o split resultou em exatamente 2 valores (nome e senha)
+        if len(dados) != 2:
+            # Pula linhas vazias ou mal formatadas
+            continue
+
+        nome, senha = dados[0], dados[1] # Desempacota os dados
+        
+        # O loop 'while True' interno não é necessário e cria um bug lógico. 
+        # Removê-lo simplifica a lógica.
+        
+        if nome_login.lower() == "sair":
+            print("")
+            print("Voltando para a pagina anterior...")
+            print("")
+            return False
             
-            if nome_login.lower() == nome.lower() and senha_login == senha: # Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
-                print("")
-                print("# ---------------------------------------------------------- #")
-                print(f"Login bem sucedido! Bem-vindo, {nome}.")
-                print("") # Imprime os dados do contato encontrado
-                 # Sai do loop se o contato for encontrado
-                return True
+        if nome_login.lower() == nome.lower() and senha_login == senha: # Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
+            print("")
+            print("# ---------------------------------------------------------- #")
+            print(f"Login bem sucedido! Bem-vindo, {nome}.")
+            print("") # Imprime os dados do contato encontrado
+            return True # Sai do loop e da função se o contato for encontrado
             
-            else: # Se não encontrar o contato
-                print("# ---------------------------------------------------------- #")
-                print("Usuário não encontrado, tente novamente.") # Mensagem de erro se o contato não for encontrado
-                return False   
+    # Este bloco só será executado se o loop 'for' terminar sem encontrar o usuário
+    print("# ---------------------------------------------------------- #")
+    print("Usuário não encontrado, tente novamente.") # Mensagem de erro se o contato não for encontrado
+    return False
 
 def buscar_alimento():
     print("# ---------------------------------------------------------- #")

@@ -1,3 +1,2 @@
 
 Yan,123
-0,C:\Users\yanar\AppData\Local\Microsoft\WindowsApps\python3.11.exe c:/Users/yanar/OneDrive/Documentos/FEI/Python/Fei-Food/feifood.py
