@@ -1,1 +1,1 @@
-5291, Hamburguer, Entrega, Rua Almirante, 1198384732
+5291, Hamburguer + Pizza, Entrega, Rua Almirante,  1198384732

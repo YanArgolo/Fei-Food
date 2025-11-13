@@ -21,9 +21,9 @@ menu = {
 menu_pedido = {
     1: "Cadastrar novo pedido",
     2: "Atualizar pedido",
-    3: "Alterar alimento",
+    3: "Excluir pedido",
     4: "Adicionar alimento ao pedido",
-    5: "Excluir pedido",
+    5: "Remover alimento do pedido",
     0: "Voltar ao menu principal"
 }
 
@@ -213,7 +213,7 @@ def total_alimentos():
     with open("alimentos.txt", "r") as arquivo_food:
         conteudo = arquivo_food.readlines()
     total = len(conteudo)
-    print(f"Total de alimentos cadastrados: {total}")
+    print(f"Total de alimentos cadastrados: {total-1}")
 
 
 #Funcionalidades do usuario comum
@@ -489,7 +489,7 @@ def excluir_pedido():
 
 #Função para adicionar alimento a um pedido existente
 def add_alimento_pedido():
-    print("Adicionar alimento ao pedido:")
+    print("Adicionar alimento ao pedido: ")
     pedido_adicionar = input("Digite o código do pedido que deseja adicionar alimento: ")
     # Abre o arquivo feifood.txt para leitura
     arquivo_food = open("pedidos.txt", "r")
@@ -503,7 +503,25 @@ def add_alimento_pedido():
         if pedido_adicionar.lower() == codigo_pedido.lower():# Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
             print(f"Pedido encontrado: {linha.strip()}") # Imprime os dados do contato encontrado
             # Atualiza os dados do contato
+            print("--- \nCardápio de Alimentos Disponíveis: ---")
+            with open("alimentos.txt", "r") as arquivo_food:
+                alimentos_disponiveis = []
+                alimentos_disponiveis = [linha.strip() for linha in arquivo_food if linha.strip()]
+
+                if not alimentos_disponiveis:
+                    print("O cardápio está vazio. Não é possível fazer um pedido.")
+                    return
+        # Filtra linhas vazias e armazena em uma lista
             novo_alimento= input("Digite o novo alimento que deseja adicionar ao pedido: ")
+
+            with open("alimentos.txt", "r") as arquivo_food:
+        # Filtra linhas vazias e armazena em uma lista
+                alimentos_disponiveis = [linha.strip() for linha in arquivo_food if linha.strip()]
+
+            for i, linha in enumerate(alimentos_disponiveis, 1):
+                # Exibe apenas a primeira parte da linha (o nome do alimento) para simplificar a escolha
+                print(f"{i} - {linha}")
+                print()
 
             #atualiza a linha específica no conteúdo
             conteudo[i] = f"{codigo_pedido},{pedido} + {novo_alimento},{tipo},{endereco}, {telefone}\n"
