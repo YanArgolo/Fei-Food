@@ -1,3 +1,12 @@
 
 Hamburguer, Estoque: 23 unidades, Peso: 330 gramas
 Sushi, Estoque: 47 unidades, Peso: 50 gramas
+Lasanha, Estoque: 30 unidades, Peso: 500 gramas
+Batata cheddar e bacon, Estoque: 10 unidades, Peso: 400 gramas
+Pastel de carne, Estoque: 23 unidades, Peso: 250 gramas
+Coca-cola, Estoque: 15 unidades, Peso: 350 gramas
+Caldo de cana, Estoque: 10 unidades, Peso: 100 gramas
+Suco de laranja, Estoque: 15 unidades, Peso: 400 gramas
+Sorvte de flocos, Estoque: 4 unidades, Peso: 500 gramas
+Pudim, Estoque: 12 unidades, Peso: 150 gramas
+Torresmo, Estoque: 14 unidades, Peso: 150 gramas

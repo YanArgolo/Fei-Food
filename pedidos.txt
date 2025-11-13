@@ -1,2 +1,10 @@
 5291, Hamburguer + Pizza, Entrega, Rua Almirante,  1198384732
 3023, Sushi, Entrega, Rua alameda breda 34, 1140028922
+ 1322, Lasanha, Retirada, FEI, 114698784
+8994, Batata cheddar e bacon, Entrega, Rua Itamarati 467, 1123365478
+ 3516, Pastel de carne, Retirada, FEI, 1163987458
+4227, Coca-cola, Entrega, Rua rio branco 34, 11466220511
+ 6795, Caldo de cana, Retirada, FEI, 1132097864
+2595, Suco de laranja, Entrega, Rua barro bonito 90, 11098765412
+ 5350, Pudim, Retirada, FEI, 11908756421
+ 5554, Torresmo, Retirada, FEI, 1167450977
