@@ -42,10 +42,13 @@ def main():
     usuario_logado = False
     while True: # Loop infinito
         escolha = exibir_menu() # Chama a função exibir_menu e armazena a escolha do usuário
+        
         if escolha == 1: # Novo contato
             cadastrar_usuario() # Chama a função novo_contato
+        
         elif escolha == 2: # Procurar contato
             usuario_logado = login() # Chama a função procurar_contato
+        
         elif escolha == 3: # Atualizar contato
             if usuario_logado:
                 buscar_alimento() # Chama a função buscar_alimento
@@ -53,6 +56,7 @@ def main():
                 print("\n# --- ACESSO NEGADO --- #")
                 print("Você precisa fazer login para buscar alimentos.")
                 print("# --------------------- #\n")
+        
         elif escolha == 4: # Menu pedidos
             if usuario_logado:
                 # O loop while FICA AQUI DENTRO
@@ -133,6 +137,11 @@ def main():
                     # Isso pega a Opção 1 (que já foi tratada) e opções inválidas
                     if escolha_admin != 1:
                          print("Opção inválida. Tente novamente.")
+        elif escolha == 0: 
+            sair()
+        
+        else:
+            print("Opção inválida. Tente novamente.")
     
 # ------------------------------------------ Exibição dos menus ------------------------------------------ #
 def exibir_menu():
