@@ -41,17 +41,17 @@ def main():
     """
     usuario_logado = False
     while True: # Loop infinito
-        escolha = exibir_menu() # Chama a função exibir_menu e armazena a escolha do usuário
+        escolha = exibir_menu() 
         
         if escolha == 1: # Novo contato
-            cadastrar_usuario() # Chama a função novo_contato
+            cadastrar_usuario() 
         
         elif escolha == 2: # Procurar contato
-            usuario_logado = login() # Chama a função procurar_contato
+            usuario_logado = login() 
         
         elif escolha == 3: # Atualizar contato
             if usuario_logado:
-                buscar_alimento() # Chama a função buscar_alimento
+                buscar_alimento() 
             else:
                 print("\n# --- ACESSO NEGADO --- #")
                 print("Você precisa fazer login para buscar alimentos.")
@@ -59,7 +59,6 @@ def main():
         
         elif escolha == 4: # Menu pedidos
             if usuario_logado:
-                # O loop while FICA AQUI DENTRO
                 while True:
                     escolha_pedido = exibir_menu_pedido()
                     
@@ -76,28 +75,26 @@ def main():
                     elif escolha_pedido == 6:
                         avaliar_pedido()
                     elif escolha_pedido == 0:
-                        # 'break' sozinho já volta para o menu principal.
                         break 
                     else:
                         print("Opção inválida. Tente novamente.")
             
-            else: # Se 'usuario_logado' for False
+            else: 
                 print("\n# --- ACESSO NEGADO --- #")
                 print("Você precisa fazer login para acessar o menu de pedidos.")
                 print("# --------------------- #\n")
                 
         elif escolha == 5: # Menu Admin
-            # 1. A "TRAVA": Começa como False toda vez que entramos no menu admin
+            
             admin_logado = False
             
             while True:
                 escolha_admin = exibir_menu_admin()
                 
                 if escolha_admin == 1:
-                    # 2. A "CHAVE": Atualiza a variável se o login for True
+            
                     admin_logado = login_adm()
                 
-                # 3. A "PORTA": Protege as opções 2-7
                 elif escolha_admin == 2:
                     if admin_logado:
                         cadastrar_alimento()
@@ -130,7 +127,7 @@ def main():
     
                 elif escolha_admin == 7:
                     if admin_logado:
-                        estatisticas_pedidos() # Chama a sua função de avaliações
+                        estatisticas_pedidos() 
                     else:
                         print("\n# --- ACESSO NEGADO --- #\nVocê precisa fazer login primeiro.\n# --------------------- #\n")   
 
@@ -154,8 +151,8 @@ def exibir_menu():
     print("Menu:")
     for opcao, descricao in menu.items():
         print(f"{opcao} - {descricao}")
-    escolha = int(input("Escolha uma opção: ")) # Lê a opção escolhida pelo usuário, sem validar
-    return escolha # Retorna a opção escolhida
+    escolha = int(input("Escolha uma opção: ")) 
+    return escolha 
 
 def exibir_menu_pedido():
     """
@@ -165,8 +162,8 @@ def exibir_menu_pedido():
     print("Menu Pedidos:")
     for opcao, descricao in menu_pedido.items():
         print(f"{opcao} - {descricao}")
-    escolha = int(input("Escolha uma opção: ")) # Lê a opção escolhida pelo usuário, sem validar
-    return escolha # Retorna a opção escolhida
+    escolha = int(input("Escolha uma opção: ")) 
+    return escolha 
 
 def exibir_menu_admin():
     """
@@ -176,8 +173,8 @@ def exibir_menu_admin():
     print("Menu Admin:")
     for opcao, descricao in menu_admin.items():
         print(f"{opcao} - {descricao}")
-    escolha = int(input("Escolha uma opção: ")) # Lê a opção escolhida pelo usuário, sem validar
-    return escolha # Retorna a opção escolhida
+    escolha = int(input("Escolha uma opção: ")) 
+    return escolha 
 
 # ------------------------------------------ Fim Exibição dos menus ------------------------------------------ #
 
@@ -189,13 +186,11 @@ def login_adm():
     nome_login = input("Digite o usuário administrador: ")
     senha_login = input("Digite a senha cadastrada: ")
     print("# ------------------------------------------------------------------------------------------------- #")
-    # Abre o arquivo feifood.txt para leitura, lê todo o conteúdo e fecha o arquivo
     with open("administrador.txt", "r") as arquivo_food:
-        conteudo = arquivo_food.readlines() # Lê todas as linhas do arquivo e armazena em uma lista
-        
-    # Procura o contato no arquivo
-    for linha in conteudo: # Para cada linha no conteúdo do arquivo
-        nome, senha, = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
+        conteudo = arquivo_food.readlines() 
+ 
+    for linha in conteudo: 
+        nome, senha, = linha.strip().split(",") 
         while True:
             if nome_login.lower()== "sair":
                 print("")
@@ -360,10 +355,10 @@ def estatisticas_pedidos():
         media = soma / contagem
         medias_avaliacoes.append((codigo, media))
 
-    # Ordena a lista pela média em ordem decrescente
+    
     medias_avaliacoes.sort(key=lambda x: x[1], reverse=True)
 
-    # Identifica a nota máxima e mínima para exibir os pedidos
+  
     max_nota = medias_avaliacoes[0][1]
     min_nota = medias_avaliacoes[-1][1]
     
@@ -415,24 +410,18 @@ def login():
     nome_login = input("Digite o usuário cadastrado: ")
     senha_login = input("Digite a senha cadastrada: ")
     print("# ---------------------------------------------------------- #")
-    # Abre o arquivo feifood.txt para leitura, lê todo o conteúdo e fecha o arquivo
+    
     with open("feifood.txt", "r") as arquivo_food:
-        conteudo = arquivo_food.readlines() # Lê todas as linhas do arquivo e armazena em uma lista
+        conteudo = arquivo_food.readlines() 
         
-    # Procura o contato no arquivo
-    for linha in conteudo: # Para cada linha no conteúdo do arquivo
-        dados = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
+    
+    for linha in conteudo: 
+        dados = linha.strip().split(",") 
 
-        # 🛑 VERIFICAÇÃO DE SEGURANÇA ADICIONADA:
-        # Verifica se o split resultou em exatamente 2 valores (nome e senha)
         if len(dados) != 2:
-            # Pula linhas vazias ou mal formatadas
             continue
 
-        nome, senha = dados[0], dados[1] # Desempacota os dados
-        
-        # O loop 'while True' interno não é necessário e cria um bug lógico. 
-        # Removê-lo simplifica a lógica.
+        nome, senha = dados[0], dados[1] 
         
         if nome_login.lower() == "sair":
             print("")
@@ -440,16 +429,15 @@ def login():
             print("")
             return False
             
-        if nome_login.lower() == nome.lower() and senha_login == senha: # Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
+        if nome_login.lower() == nome.lower() and senha_login == senha: 
             print("")
             print("# ---------------------------------------------------------- #")
             print(f"Login bem sucedido! Bem-vindo, {nome}.")
-            print("") # Imprime os dados do contato encontrado
-            return True # Sai do loop e da função se o contato for encontrado
+            print("") 
+            return True 
             
-    # Este bloco só será executado se o loop 'for' terminar sem encontrar o usuário
     print("# ---------------------------------------------------------- #")
-    print("Usuário não encontrado, tente novamente.") # Mensagem de erro se o contato não for encontrado
+    print("Usuário não encontrado, tente novamente.") 
     return False
 
 def buscar_alimento():
@@ -457,25 +445,22 @@ def buscar_alimento():
     print("Buscar alimento:")
     alimento_src = input("Digite o nome do alimento que deseja procurar: ")
     print("# ---------------------------------------------------------- #")
-    # Abre o arquivo contatos.txt para leitura, lê todo o conteúdo e fecha o arquivo
     with open("alimentos.txt", "r") as arquivo_food:
-        conteudo = arquivo_food.readlines() # Lê todas as linhas do arquivo e armazena em uma lista
+        conteudo = arquivo_food.readlines() 
         
-    # Procura o contato no arquivo
-    for linha in conteudo: # Para cada linha no conteúdo do arquivo
-        alimentos = linha.strip().split(",") # Divide a linha em partes, separando por vírgula
-        if alimento_src.lower() == alimentos[0].lower()and alimentos[1].lower() and alimentos[2].lower(): # Verifica se o nome procurado é igual ao nome do contato, ignorando maiúsculas e minúsculas
+    for linha in conteudo: 
+        alimentos = linha.strip().split(",") 
+        if alimento_src.lower() == alimentos[0].lower()and alimentos[1].lower() and alimentos[2].lower(): 
             print("")
             print("# ---------------------------------------------------------- #")
             print(f"Alimento disponível! Faça seu pedido.")
             print(alimentos[0], alimentos[1] , alimentos[2])
             print("")
-            break # Sai do loop se o contato for encontrado
+            break 
 
-    else: # Se não encontrar o contato
+    else: 
         print("# ---------------------------------------------------------- #")
-        print("Alimento indisponível, escolha outra opção.") # Mensagem de erro se o alimento não estiver disponivel
-
+        print("Alimento indisponível, escolha outra opção.") 
 # ------------------------------------------ Fim menu ------------------------------------------ #
 
 
@@ -504,7 +489,6 @@ def cadastrar_pedido():
     print("--- \nCardápio de Alimentos Disponíveis: ---")
     print("# ---------------------------------------------------------- #")
     for i, linha in enumerate(alimentos_disponiveis, 1):
-        # Exibe apenas a primeira parte da linha (o nome do alimento) para simplificar a escolha
         print(f"{i} - {linha}")
         print()
     # Abre o pedidos.txt para cadastrar o pedido
@@ -547,8 +531,6 @@ def cadastrar_pedido():
     print("---------------------")
     arquivo_food.close()   
 
-# funcao para editar pedidos existentes
-# funcao para editar pedidos existentes
 def editar_pedido():
     """
     Atualiza os dados de um contato existente na agenda.
@@ -564,37 +546,28 @@ def editar_pedido():
     conteudo = arquivo_food.readlines()
     arquivo_food.close()
 
-    # Procura o contato no arquivo
     for i, linha in enumerate(conteudo): # Para cada indice e linha no conteúdo do arquivo 
         
-        # --- MUDANÇA 1: Pula linhas vazias (Evita o ValueError) ---
+       
         if not linha.strip():
             continue 
             
         codigo_pedido, pedido, tipo, endereco, telefone = linha.strip().split(",") 
         
-        # --- MUDANÇA 2: Adiciona .strip() para remover espaços ---
+
         if pedido_editar.lower() == codigo_pedido.strip().lower():
             print(f"Pedido encontrado: {linha.strip()}") 
             
-            # (O resto da sua lógica está perfeita)
-            print(codigo_pedido.strip()) # .strip() aqui também para mostrar limpo
+            print(codigo_pedido.strip()) 
             novo_pedido= input("Digite o novo pedido que deseja fazer (deixe em branco para não alterar): ")
             novo_tipo = input("Entrega ou retirada? (deixe em branco para não alterar): ")
             novo_endereco = input("Digite o novo endereço (deixe em branco para não alterar): ")
             novo_telefone = input("Digite o novo telefone (deixe em branco para não alterar): ")
-
-            # .strip() nos valores antigos para limpar os dados
-            # --- CORREÇÃO: Checa se o campo está vazio OU se é "0" ---
-
-                    # Pega o valor antigo e limpa (remove espaços)
             pedido_antigo = pedido.strip()
             tipo_antigo = tipo.strip()
             endereco_antigo = endereco.strip()
             telefone_antigo = telefone.strip()
 
-                    # Se o usuário digitou "0" ou deixou em branco, usa o valor antigo.
-                    # Senão, usa o novo valor que ele digitou.
             if novo_pedido == "0" or novo_pedido == "":
                 novo_pedido = pedido_antigo
 
@@ -607,10 +580,8 @@ def editar_pedido():
             if novo_telefone == "0" or novo_telefone == "":
                  novo_telefone = telefone_antigo
 
-                     # A linha de salvar o conteúdo continua a mesma
             conteudo[i] = f"{codigo_pedido.strip()},{novo_pedido},{novo_tipo},{novo_endereco},{novo_telefone}\n"
 
-            # Abre o arquivo pedidos.txt para escrita
             arquivo_food = open("pedidos.txt", "w")
             # Grava os feifood atualizados no arquivo
             for linha_salvar in conteudo: 
@@ -621,13 +592,13 @@ def editar_pedido():
             print("Pedido atualizado com sucesso!") 
             print("# ---------------------------------------------------------- #")
 
-            break # Sai do loop se o contato for encontrado
+            break 
     
-    else: # Se o 'for' loop terminar sem 'break'
+    else: 
         print("# ---------------------------------------------------------- #")
-        print("Pedido não encontrado.") # Mensagem de erro
+        print("Pedido não encontrado.") 
         
-#Funcao para excluir pedidos existentes
+
 def excluir_pedido():
     print("# ---------------------------------------------------------- #")
     pedido_excluir = input("Digite o código do pedido que deseja excluir: ")
@@ -671,16 +642,14 @@ def add_alimento_pedido():
     conteudo = arquivo_food.readlines()
     arquivo_food.close()
     
-    # Procura o contato no arquivo
     for i, linha in enumerate(conteudo): # Para cada indice e linha no conteúdo do arquivo 
         
-        # --- MUDANÇA 1: Pula linhas vazias (Evita o ValueError) ---
         if not linha.strip():
             continue
             
         codigo_pedido, pedido, tipo, endereco, telefone = linha.strip().split(",") 
         
-        # --- MUDANÇA 2: Adiciona .strip() para remover espaços ---
+    
         if pedido_adicionar.lower() == codigo_pedido.strip().lower():
             print("# ---------------------------------------------------------- #")
             print(f"Pedido encontrado: {linha.strip()}") 
@@ -698,8 +667,6 @@ def add_alimento_pedido():
                     print("O cardápio está vazio. Não é possível fazer um pedido.")
                     return
                         
-            # --- MUDANÇA 3: Renomeei 'linha' para 'linha_cardapio' ---
-            # Isso evita o bug de 'i' vs 'c' que vimos antes
             for c, linha_cardapio in enumerate(alimentos_disponiveis, 1):
                 print(f"{c} - {linha_cardapio}")
                 print()
@@ -707,7 +674,6 @@ def add_alimento_pedido():
             print("# ---------------------------------------------------------- #")
             novo_alimento= input("Digite o novo alimento que deseja adicionar ao pedido: ")
 
-            # Bloco de Validação
             alimento_valido = False
             for item_do_cardapio in alimentos_disponiveis:
                 if novo_alimento.lower() in item_do_cardapio.lower():
@@ -716,15 +682,14 @@ def add_alimento_pedido():
 
             if not alimento_valido:
                 print(f"{novo_alimento} não faz parte do cardápio.")
-                return # Sai da função sem salvar
+                return 
 
-            # --- MUDANÇA 4: Limpa os dados antigos com .strip() ---
             conteudo[i] = f"{codigo_pedido.strip()},{pedido.strip()} + {novo_alimento},{tipo.strip()},{endereco.strip()},{telefone.strip()}\n"
 
             # Abre o arquivo pedidos.txt para escrita
             arquivo_food = open("pedidos.txt", "w")
             # Grava os feifood atualizados no arquivo
-            for linha_salvar in conteudo: # Renomeei 'linha'
+            for linha_salvar in conteudo:
                 arquivo_food.write(linha_salvar) 
             # Fecha o arquivo
             arquivo_food.close()
@@ -732,11 +697,11 @@ def add_alimento_pedido():
             print("Alimento adicionado ao pedido com sucesso!") # Mensagem de sucesso
             print("# ---------------------------------------------------------- #")
 
-            break # Sai do loop se o contato for encontrado
+            break 
     
     else: # Se não encontrar o pedido
         print("# ---------------------------------------------------------- #")
-        print("Pedido não encontrado.") # Mensagem de erro se o contato não for encontrado
+        print("Pedido não encontrado.") 
         print("# ---------------------------------------------------------- #")
 
 def excluir_alimento_pedido():
@@ -753,37 +718,32 @@ def excluir_alimento_pedido():
     # Procura o contato no arquivo
     for i, linha in enumerate(conteudo): # Para cada indice e linha no conteúdo do arquivo 
         
-        # --- MUDANÇA 1: Pula linhas vazias (Evita o ValueError) ---
         if not linha.strip():
             continue
             
         codigo_pedido, pedido, tipo, endereco, telefone = linha.strip().split(",") 
         
-        # --- MUDANÇA 2: Adiciona .strip() para remover espaços ---
         if pedido_remover.lower() == codigo_pedido.strip().lower():
             print("# ---------------------------------------------------------- #")
             print(f"Pedido encontrado: {linha.strip()}") 
             
             alimento_remover = input("Digite o alimento que deseja remover do pedido: ")
 
-            # Remove o alimento do pedido (usando .strip() no pedido antigo)
-            # A sua lógica de replace está boa!
             novos_itens = pedido.strip().replace(f" + {alimento_remover}", "").replace(f"{alimento_remover} + ", "").replace(alimento_remover, "")
 
-            # Atualiza a linha específica no conteúdo (limpando todos os dados)
             conteudo[i] = f"{codigo_pedido.strip()},{novos_itens.strip()},{tipo.strip()},{endereco.strip()},{telefone.strip()}\n"
 
             # Abre o arquivo pedidos.txt para escrita
             arquivo_food = open("pedidos.txt", "w")
             # Grava os feifood atualizados no arquivo
-            for linha_salvar in conteudo: # Renomeei 'linha'
+            for linha_salvar in conteudo: 
                 arquivo_food.write(linha_salvar) 
             # Fecha o arquivo
             arquivo_food.close()
             print("Alimento removido do pedido com sucesso!")
             print("# ---------------------------------------------------------- #") 
 
-            break # Sai do loop se o contato for encontrado
+            break 
     
     else: # Se não encontrar o pedido
         print("# ---------------------------------------------------------- #")
@@ -806,13 +766,11 @@ def avaliar_pedido():
 
     print("--- \nPedidos para Avaliação: ---")
     for i, linha in enumerate(pedidos_feitos, 1):
-        # Exibe o pedido completo
         print(f"{i} - {linha}")
         print()
     print("# ---------------------------------------------------------- #")
     pedido_avaliar = input("Digite o código do pedido que deseja avaliar: ").strip()
     
-    # Lê o conteúdo do arquivo pedidos.txt novamente para buscar
     with open("pedidos.txt", "r") as arquivo_food:
         conteudo = arquivo_food.readlines()
 
@@ -827,7 +785,6 @@ def avaliar_pedido():
             print(f"\nPedido encontrado: {linha.strip()}")
             encontrado = True
             
-            # --- Lógica de Avaliação ---
             while True:
                 print("# ---------------------------------------------------------- #")
                 nota_str = input("Digite um número inteiro de 0 a 5 para avaliar com estrelas o pedido: ").strip()

@@ -10,3 +10,5 @@ Suco de laranja, Estoque: 15 unidades, Peso: 400 gramas
 Sorvte de flocos, Estoque: 4 unidades, Peso: 500 gramas
 Pudim, Estoque: 12 unidades, Peso: 150 gramas
 Torresmo, Estoque: 14 unidades, Peso: 150 gramas
+
+
